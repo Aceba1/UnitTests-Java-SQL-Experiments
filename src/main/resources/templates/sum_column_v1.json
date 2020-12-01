@@ -1,0 +1,34 @@
+{
+  "columns": [
+    {
+      "asName": "shifted_delta", // Result is set to this name
+      "expr": {
+        "type": "s", // Subtract
+        "a": {
+          "type": "m", // Multiply
+          "a": {
+            "type": "v", // Value
+            "a": "2"
+          },
+          "b": {
+            "type": "c", // Column
+            "a": "left",
+            "b": "table1"
+          }
+        },
+        "b": {
+          "type": "a", // Addition
+          "a": {
+            "type": "c", // Column
+            "a": "right",
+            "b": "table1"
+          },
+          "b": {
+            "type": "v", // Value
+            "a": 5
+          }
+        }
+      }
+    }
+  ]
+}

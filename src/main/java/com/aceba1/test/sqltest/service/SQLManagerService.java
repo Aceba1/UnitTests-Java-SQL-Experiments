@@ -5,6 +5,17 @@ import org.springframework.stereotype.Service;
 
 import java.sql.*;
 
+/* NOTES:
+  * Columns will be calculated within a SELECT and set to a new table
+  * Can expose Rest API to test column without appending
+  * Can page queries with LIMIT and OFFSET
+  * ... LIMIT size OFFSET start;
+  *
+  * Should check JSON for illegal characters #-/\()';
+  *
+  *
+ */
+
 @Service
 public class SQLManagerService {
 
