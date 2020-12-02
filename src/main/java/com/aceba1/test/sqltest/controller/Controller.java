@@ -7,10 +7,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.OptBoolean;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.RequestContext;
+import org.yaml.snakeyaml.reader.StreamReader;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.Map;
 
 @RestController
 public class Controller {
@@ -31,6 +40,36 @@ public class Controller {
 
     return result;
   }
+
+  //TODO: Segment sent data!
+  @PostMapping("/csv")
+  @CrossOrigin(origins = "http://localhost:3000") // Very important
+  public long postCSV(
+    HttpServletRequest request
+  ) {
+    try {
+      return sqlMan.uploadCSV("transaction", new InputStreamReader(request.getInputStream()));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return 0;
+    }
+  }
+
+//  @PostMapping("/upload")
+//  public ResponseEntity<Object> uploadCSV(
+//    HttpServletRequest request,
+//    @RequestParam Map<String, String> params
+//  ) {
+//    try {
+//      System.out.println(new BufferedReader(new InputStreamReader(request.getInputStream())).readLine());
+//      System.out.println(params.values());
+//      return ResponseEntity.status(200).build();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//      return ResponseEntity.status(400).build();
+//    }
+//    // return ResponseEntity.status(100).build(); // Retry
+//  }
 
   @PostMapping("/")
   public Object postStuff(
