@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.OptBoolean;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,14 +45,15 @@ public class Controller {
   //TODO: Segment sent data!
   @PostMapping("/csv")
   @CrossOrigin(origins = "http://localhost:3000") // Very important
-  public long postCSV(
+  public Object postCSV(
+    @RequestParam String table,
     HttpServletRequest request
   ) {
     try {
-      return sqlMan.uploadCSV("transaction", new InputStreamReader(request.getInputStream()));
+      return sqlMan.uploadCSV(table, new InputStreamReader(request.getInputStream()));
     } catch (Exception e) {
       e.printStackTrace();
-      return 0;
+      return ResponseEntity.status(500).body(e.getMessage());
     }
   }
 
