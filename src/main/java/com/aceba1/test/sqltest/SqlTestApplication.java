@@ -1,6 +1,5 @@
 package com.aceba1.test.sqltest;
 
-import com.aceba1.test.sqltest.service.SQLManagerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

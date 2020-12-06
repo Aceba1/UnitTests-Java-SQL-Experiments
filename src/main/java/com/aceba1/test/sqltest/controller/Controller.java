@@ -1,32 +1,20 @@
 package com.aceba1.test.sqltest.controller;
 
 import com.aceba1.test.sqltest.model.RequestGet;
-import com.aceba1.test.sqltest.service.SQLManagerService;
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.OptBoolean;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.aceba1.test.sqltest.service.PostgreSQLManagerService;
+import com.aceba1.test.sqltest.utils.SQLInsert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.RequestContext;
-import org.yaml.snakeyaml.reader.StreamReader;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.Map;
 
 @RestController
 public class Controller {
 
   @Autowired
-  SQLManagerService sqlMan;
+  PostgreSQLManagerService sqlMan;
 
   @GetMapping("/")
   public Object getStuff(
@@ -50,7 +38,7 @@ public class Controller {
     HttpServletRequest request
   ) {
     try {
-      return sqlMan.uploadCSV(table, new InputStreamReader(request.getInputStream()));
+      return SQLInsert.uploadCSV(sqlMan.getConnection(), table, new InputStreamReader(request.getInputStream()));
     } catch (Exception e) {
       e.printStackTrace();
       return ResponseEntity.status(500).body(e.getMessage());
