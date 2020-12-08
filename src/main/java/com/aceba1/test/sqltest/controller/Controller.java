@@ -35,10 +35,14 @@ public class Controller {
   @CrossOrigin(origins = "http://localhost:3000") // Very important
   public Object postCSV(
     @RequestParam String table,
+    @RequestParam(defaultValue = "100") Integer batch,
+    @RequestParam(defaultValue = "1000") Integer rows,
     HttpServletRequest request
   ) {
     try {
-      return SQLInsert.uploadCSV(sqlMan.getConnection(), table, new InputStreamReader(request.getInputStream()));
+      return SQLInsert.uploadCSV(sqlMan.getConnection(), table,
+        new InputStreamReader(request.getInputStream()),
+        rows, batch);
     } catch (Exception e) {
       e.printStackTrace();
       return ResponseEntity.status(500).body(e.getMessage());
