@@ -1,9 +1,11 @@
 package com.aceba1.test.sqltest.service;
 
+import ch.qos.logback.core.db.dialect.PostgreSQLDialect;
 import com.aceba1.test.sqltest.utils.SQLQuery;
 import com.aceba1.test.sqltest.utils.SQLUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,6 +33,10 @@ public class PostgreSQLManagerService {
   private String USERNAME;
   @Value("${spring.datasource.password}")
   private String PASSWORD;
+
+  { instance = this; }
+  private static PostgreSQLManagerService instance;
+  public static PostgreSQLManagerService getInstance() { return instance; }
 
   public Connection getConnection() {
     try {
