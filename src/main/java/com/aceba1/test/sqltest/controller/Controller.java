@@ -2,13 +2,18 @@ package com.aceba1.test.sqltest.controller;
 
 import com.aceba1.test.sqltest.model.RequestGet;
 import com.aceba1.test.sqltest.service.PostgreSQLManagerService;
+import com.aceba1.test.sqltest.utils.MapBuilder;
 import com.aceba1.test.sqltest.utils.SQLInsert;
+import com.aceba1.test.sqltest.utils.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Map;
 
 @RestController
 public class Controller {
@@ -16,23 +21,9 @@ public class Controller {
   @Autowired
   PostgreSQLManagerService sqlMan;
 
-  @GetMapping("/")
-  public Object getStuff(
-    @RequestBody RequestGet body
-  ) {
-    // Test
-
-    String[] result = new String[body.columns.size()];
-
-    for (int i = 0; i < body.columns.size(); i++)
-      result[i] = body.columns.get(i).toString("USER_OID_SALT");
-
-    return result;
-  }
-
   //TODO: Segment sent data!
   @PostMapping("/csv")
-  @CrossOrigin(origins = "http://localhost:3000") // Very important
+  //@CrossOrigin(origins = "http://localhost:3000") // important?
   public Object postCSV(
     @RequestParam String table,
     @RequestParam(defaultValue = "100") Integer batch,
