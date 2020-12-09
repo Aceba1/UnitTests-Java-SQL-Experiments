@@ -1,15 +1,11 @@
 package com.aceba1.test.sqltest.utils;
 
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class SQLInsert {
   public static final int MAX_BATCH = 1000;
@@ -51,7 +47,7 @@ public class SQLInsert {
 
           int offset = (index * columnCount) + 1;
           for (int i = 0; i < columnCount; i++)
-            appendStatement(multiStatement,
+            SQLUtils.appendStatement(multiStatement,
               i + offset,
               types[i], values[i]
             );
@@ -82,7 +78,7 @@ public class SQLInsert {
 
         int offset = (index * columnCount) + 1;
         for (int i = 0; i < columnCount; i++)
-          appendStatement(semiStatement,
+          SQLUtils.appendStatement(semiStatement,
             i + offset,
             types[i], values[i]
           );
@@ -98,7 +94,9 @@ public class SQLInsert {
     Connection connection,
     String table,
     Reader csv,
-    int statementsPerBatch) throws SQLException, IOException {
+    int statementsPerBatch
+  ) throws SQLException, IOException {
+
     var reader = new BufferedReader(csv);
 
     String columns = reader.readLine();
@@ -114,9 +112,10 @@ public class SQLInsert {
         row.length() != 0
     ) {
       String[] values = row.split(",");
-      for (int i = 0; i < columnCount; i++) {
-        appendStatement(statement, i + 1, types[i], values[i]);
-      }
+      for (int i = 0; i < columnCount; i++)
+        SQLUtils.appendStatement(statement,
+          i + 1,
+          types[i], values[i]);
 
       statement.addBatch();
       if (++count % statementsPerBatch == 0) {
@@ -136,24 +135,9 @@ public class SQLInsert {
   public static long uploadCSV(
     Connection connection,
     String table,
-    Reader csv) throws SQLException, IOException {
+    Reader csv
+  ) throws SQLException, IOException {
+
     return uploadCSV(connection, table, csv, MAX_BATCH);
   }
-
-  private static void appendStatement(
-    PreparedStatement statement,
-    int position,
-    char type,
-    String value
-  ) throws SQLException {
-
-    switch (type) {
-      case 'c' -> statement.setString(position, value);
-      case 'i' -> statement.setInt(position, Integer.parseInt(value));
-      case 'b' -> statement.setLong(position, Long.parseLong(value));
-      case 'd','n' -> statement.setDouble(position, Double.parseDouble(value));
-      default -> throw new IllegalArgumentException("Unknown type '" + type + "'");
-    }
-  }
-
 }
