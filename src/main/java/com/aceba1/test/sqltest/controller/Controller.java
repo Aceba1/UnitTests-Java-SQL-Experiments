@@ -49,21 +49,19 @@ public class Controller {
     }
   }
 
-//  @PostMapping("/upload")
-//  public ResponseEntity<Object> uploadCSV(
-//    HttpServletRequest request,
-//    @RequestParam Map<String, String> params
-//  ) {
-//    try {
-//      System.out.println(new BufferedReader(new InputStreamReader(request.getInputStream())).readLine());
-//      System.out.println(params.values());
-//      return ResponseEntity.status(200).build();
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//      return ResponseEntity.status(400).build();
-//    }
-//    // return ResponseEntity.status(100).build(); // Retry
-//  }
+  @GetMapping("/table/size")
+  public Object getTableSize(
+    @RequestParam String table
+  ) throws SQLException {
+    Connection conn = sqlMan.getConnection();
+    Map result = new MapBuilder(
+      "table", table,
+      "prettySize", SQLQuery.getTableSizePretty(conn, table),
+      "byteSize", SQLQuery.getTableSizeBytes(conn, table)
+    );
+    conn.close();
+    return result;
+  }
 
   @PostMapping("/")
   public Object postStuff(

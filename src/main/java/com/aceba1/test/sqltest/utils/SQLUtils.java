@@ -65,6 +65,26 @@ public class SQLUtils {
   public static void appendStatement(
     PreparedStatement statement,
     int position,
+    Object value
+  ) throws SQLException {
+
+    if (value == null)
+      statement.setObject(0, null);
+    if (value instanceof String)
+      statement.setString(position, (String) value);
+    else if (value instanceof Double)
+      statement.setDouble(position, (Double) value);
+    else if (value instanceof Long)
+      statement.setLong(position, (Long) value);
+    else if (value instanceof Integer)
+      statement.setInt(position, (Integer) value);
+    else
+      throw new IllegalArgumentException("Unknown type '" + value.getClass().toString() + "'");
+  }
+
+  public static void appendStatement(
+    PreparedStatement statement,
+    int position,
     char type,
     String value
   ) throws SQLException {
