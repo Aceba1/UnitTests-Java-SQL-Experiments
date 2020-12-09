@@ -5,6 +5,10 @@ import java.util.List;
 public class ColumnProcessor {
   public static final String PUBLIC_TABLESALT = "__PUBLIC__";
 
+  public static String verifyWrappedTable(String table, String userTableSalt) {
+    return table.startsWith(PUBLIC_TABLESALT) ? table : wrapPrivateTable(table, userTableSalt);
+  }
+
   public static String wrapPrivateTable(String tableName, String userTableSalt) {
     return "__" + userTableSalt + "__" + tableName;
   }

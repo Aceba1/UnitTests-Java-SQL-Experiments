@@ -1,6 +1,6 @@
 package com.aceba1.test.sqltest.controller;
 
-import com.aceba1.test.sqltest.model.RequestGet;
+import com.aceba1.test.sqltest.model.RequestNewTable;
 import com.aceba1.test.sqltest.service.PostgreSQLManagerService;
 import com.aceba1.test.sqltest.utils.MapBuilder;
 import com.aceba1.test.sqltest.utils.SQLInsert;
@@ -54,12 +54,11 @@ public class Controller {
     return result;
   }
 
-  @PostMapping("/")
-  public Object postStuff(
-    @RequestParam String table,
-    @RequestBody String columns,
-    @RequestBody String values
+  @PostMapping("/table")
+  public Object createTable(
+    @RequestBody RequestNewTable request
   ) {
+
 //    Connection conn = sqlMan.getConnection();
 //    conn.beginRequest();
 //

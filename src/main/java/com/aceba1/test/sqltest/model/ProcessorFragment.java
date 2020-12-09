@@ -41,15 +41,9 @@ public class ProcessorFragment {
       case "a" -> "(" + toString(a, salt) + "+" + toString(b, salt) + ")";
       case "s" -> "(" + toString(a, salt) + "-" + toString(b, salt) + ")";
       case "v" -> a.asText();
-      case "c" -> verifyColumn(b.asText(), a.asText(), salt); // This is what the salt is for
+      case "c" -> ColumnProcessor.verifyWrappedTable(b.asText(), salt)  + "." + a.asText(); // This is what salt is for
       default -> "/* UNKNOWN type (" + type + ") */"; // Sanitizing JSON beforehand should keep this safe
     };
-  }
-
-  private static String verifyColumn(String table, String column, String salt) {
-    return table.startsWith(ColumnProcessor.PUBLIC_TABLESALT) ?
-      table + "." + column :
-      ColumnProcessor.wrapPrivateTable(table, salt) + "." + column;
   }
 
   public String toString(String privateSalt) {
