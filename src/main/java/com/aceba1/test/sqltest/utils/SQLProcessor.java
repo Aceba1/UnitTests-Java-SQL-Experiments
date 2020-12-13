@@ -17,7 +17,6 @@ public class SQLProcessor {
     PreparedStatement statement = connection.prepareStatement("SELECT amount FROM transaction");
     statement.setFetchSize(10000);
     ResultSet set = statement.executeQuery();
-    statement.execute();
     sw.stop();
     sw.start("Process ResultSet");
 
