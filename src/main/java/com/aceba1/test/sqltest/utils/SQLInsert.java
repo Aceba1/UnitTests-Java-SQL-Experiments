@@ -26,7 +26,7 @@ public class SQLInsert {
       SQLUtils.genSqlInsert(table, columns, rowOfParams, rowsPerStatement)
     );
 
-    char[] types = SQLUtils.mapTableTypes(columns, SQLQuery.getTableDetails(connection, table));
+    ColumnType[] types = SQLUtils.mapTableTypes(columns, SQLQuery.getTableDetails(connection, table));
     int columnCount = types.length;
     String[] rowBuffer = new String[rowsPerStatement];
 
@@ -102,7 +102,7 @@ public class SQLInsert {
     String columns = reader.readLine();
     PreparedStatement statement = connection.prepareStatement(SQLUtils.genSqlInsert(table, columns));
 
-    char[] types = SQLUtils.mapTableTypes(columns, SQLQuery.getTableDetails(connection, table));
+    ColumnType[] types = SQLUtils.mapTableTypes(columns, SQLQuery.getTableDetails(connection, table));
     int columnCount = types.length;
 
     String row;

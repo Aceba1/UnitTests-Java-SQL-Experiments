@@ -39,11 +39,11 @@ public class SQLUtils {
   /**
    * @return [i] int, [b] long, [nd] double, [c] string
    */
-  public static char[] mapTableTypes(String columns, ResultSet resultSet) throws SQLException {
+  public static ColumnType[] mapTableTypes(String columns, ResultSet resultSet) throws SQLException {
 
     String[] names = columns.replaceAll(" ", "").toLowerCase().split(",");
     int size = names.length;
-    char[] result = new char[size];
+    ColumnType[] result = new ColumnType[size];
 
     //System.out.println("COLUMN TYPES ( ");
     while (resultSet.next()) {
@@ -52,7 +52,7 @@ public class SQLUtils {
       for (int i = 0; i < size; i++) {
         if (check.equals(names[i])) {
           //System.out.println("  " + column + " : " + type);
-          result[i] = resultSet.getString(2).charAt(0);
+          result[i] = MapType(resultSet.getString(2));
           break;
         }
       }
@@ -69,7 +69,7 @@ public class SQLUtils {
   ) throws SQLException {
 
     if (value == null)
-      statement.setObject(0, null);
+      statement.setObject(position, null);
     if (value instanceof String)
       statement.setString(position, (String) value);
     else if (value instanceof Double)
@@ -85,16 +85,26 @@ public class SQLUtils {
   public static void appendStatement(
     PreparedStatement statement,
     int position,
-    char type,
+    ColumnType type,
     String value
   ) throws SQLException {
 
     switch (type) {
-      case 'c' -> statement.setString(position, value);
-      case 'i' -> statement.setInt(position, Integer.parseInt(value));
-      case 'b' -> statement.setLong(position, Long.parseLong(value));
-      case 'd','n' -> statement.setDouble(position, Double.parseDouble(value));
+      case Text -> statement.setString(position, value);
+      case Integer -> statement.setInt(position, Integer.parseInt(value));
+      case BigInt -> statement.setLong(position, Long.parseLong(value));
+      case Double -> statement.setDouble(position, Double.parseDouble(value));
       default -> throw new IllegalArgumentException("Unknown type '" + type + "'");
     }
+  }
+
+  public static ColumnType MapType(String typeName) {
+    return switch(typeName.charAt(0)) {
+      case 't' -> ColumnType.Text;
+      case 'i' -> ColumnType.Integer;
+      case 'b' -> ColumnType.BigInt;
+      case 'd', 'n' -> ColumnType.Double;
+      default -> throw new IllegalArgumentException("Unexpected typeName: " + typeName);
+    };
   }
 }
