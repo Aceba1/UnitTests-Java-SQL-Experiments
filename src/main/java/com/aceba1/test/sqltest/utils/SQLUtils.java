@@ -52,7 +52,7 @@ public class SQLUtils {
       for (int i = 0; i < size; i++) {
         if (check.equals(names[i])) {
           //System.out.println("  " + column + " : " + type);
-          result[i] = MapType(resultSet.getString(2));
+          result[i] = SQLColumn.mapType(resultSet.getString(2));
           break;
         }
       }
