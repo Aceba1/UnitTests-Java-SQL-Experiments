@@ -97,14 +97,4 @@ public class SQLUtils {
       default -> throw new IllegalArgumentException("Unknown type '" + type + "'");
     }
   }
-
-  public static ColumnType MapType(String typeName) {
-    return switch(typeName.charAt(0)) {
-      case 't' -> ColumnType.Text;
-      case 'i' -> ColumnType.Integer;
-      case 'b' -> ColumnType.BigInt;
-      case 'd', 'n' -> ColumnType.Double;
-      default -> throw new IllegalArgumentException("Unexpected typeName: " + typeName);
-    };
-  }
 }
